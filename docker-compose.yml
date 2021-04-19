@@ -1,0 +1,31 @@
+version: "3"
+
+services: 
+    web:
+        container_name: exampleapp
+        restart: always
+        build: .
+        ports: 
+            - "5000:3000"
+        links: 
+            - mongo
+    
+    proxy:
+        image: nginx
+        volumes:
+            - ./public:/usr/share/nginx/html
+        ports:
+            - "8080:80"
+        environment:
+            - NGINX_HOST=foobar.com
+            - NGINX_PORT=80
+        logging: 
+            driver: none
+
+    mongo:
+        container_name: mymongodatabase
+        image: mongo
+        ports: 
+            - "27018:27017"
+        logging: 
+            driver: none
